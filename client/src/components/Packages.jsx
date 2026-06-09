@@ -57,7 +57,7 @@ const Packages = ({ setModalType, setSelectedItem, setModalData }) => {
                   <h4 className="text-[17px] font-bold text-stone-800 flex items-center gap-2"><span className="iconify text-gold-500 text-xl" data-icon="mdi:map-marker-multiple"></span>Top Places to Visit</h4>
                   <span className="text-[11px] font-bold text-gold-600 bg-gold-500/10 px-3 py-1.5 rounded-full">8+ Places</span>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-7">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-7">
                   {[
                     { key: 'dwarka-mandir', icon: '🕌', name: 'Dwarka Mandir', sub: 'Dwarkadhish', bg: 'bg-orange-50', hoverBg: 'group-hover:bg-orange-100', img: mmtDwarkaImg },
                     { key: 'gomti-ghat', icon: '🌅', name: 'Gomti Ghat', sub: 'Sacred River', bg: 'bg-blue-50', hoverBg: 'group-hover:bg-blue-100', img: gomtiGhatImg },
