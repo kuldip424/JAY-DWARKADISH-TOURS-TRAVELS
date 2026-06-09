@@ -1,4 +1,9 @@
 {
+  "name": "jay-dwarkadish-tours",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd client && npm install && npm run build && cp -R dist ../dist"
+  },
   "dependencies": {
     "nodemon": "^3.1.14"
   }
