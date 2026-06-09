@@ -127,11 +127,11 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
             </div>
 
             {/* Stats */}
-            <div className="flex gap-12">
+            <div className="flex flex-wrap gap-6 md:gap-12">
               <div><div className="text-4xl font-extrabold text-white counter-num" data-target="15000">0</div><div className="text-[13px] text-stone-500 mt-1">Happy Yatris</div></div>
-              <div className="w-px bg-white/10"></div>
+              <div className="hidden md:block w-px bg-white/10"></div>
               <div><div className="text-4xl font-extrabold text-white counter-num" data-target="500">0</div><div className="text-[13px] text-stone-500 mt-1">5★ Reviews</div></div>
-              <div className="w-px bg-white/10"></div>
+              <div className="hidden md:block w-px bg-white/10"></div>
               <div><div className="text-4xl font-extrabold text-white counter-num" data-target="8">0</div><div className="text-[13px] text-stone-500 mt-1">Tour Packages</div></div>
             </div>
           </div>
@@ -218,7 +218,7 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-2 block">Vehicle Selection</label>
                     <div className="grid grid-cols-3 gap-2">
@@ -235,7 +235,7 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
                     </div>
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block">Passengers</label>
+                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block mt-3 md:mt-0">Passengers</label>
                     <div className="relative">
                       <span className="iconify absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-sm" data-icon="mdi:account-group"></span>
                       <input type="number" min="1" max={carSelection === 'Sedan' ? 4 : carSelection === 'SUV' ? 6 : 12} required className="form-input w-full pl-9 pr-3 py-2.5 rounded-xl text-[13px]" value={passengers} onChange={e => setPassengers(e.target.value)} />
@@ -243,13 +243,13 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block">Your Name</label>
+                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block mt-3 md:mt-0">Your Name</label>
                     <input type="text" placeholder="Name" required className="form-input w-full px-4 py-2.5 rounded-xl text-[13px]" value={name} onChange={e => setName(e.target.value)} />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block">Phone Number</label>
+                    <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block mt-3 md:mt-0">Phone Number</label>
                     <input type="tel" placeholder="+91 XXXXX" required className="form-input w-full px-4 py-2.5 rounded-xl text-[13px]" value={phone} onChange={e => setPhone(e.target.value)} />
                   </div>
                 </div>

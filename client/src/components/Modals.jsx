@@ -246,11 +246,11 @@ const Modals = ({ modalType, setModalType, selectedItem, modalData }) => {
             <p className="text-[13px] text-stone-400 mt-1">Starting at <span className="font-bold text-gold-600">₹{modalData.price.toLocaleString()}</span></p>
           </div>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div><label className="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-1.5 block">Name</label><input type="text" placeholder="Full name" className="form-input w-full px-4 py-3 rounded-xl text-sm" value={pkgName} onChange={e => setPkgName(e.target.value)} /></div>
               <div><label className="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-1.5 block">Phone</label><input type="tel" placeholder="+91 XXXXX" className="form-input w-full px-4 py-3 rounded-xl text-sm" value={pkgPhone} onChange={e => setPkgPhone(e.target.value)} /></div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div><label className="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-1.5 block">Date</label><input type="date" className="form-input w-full px-4 py-3 rounded-xl text-sm" value={pkgDate} onChange={e => setPkgDate(e.target.value)} min={new Date().toISOString().split('T')[0]} /></div>
               <div><label className="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-1.5 block">Pickup Location</label><input type="text" placeholder="Hotel / Station" className="form-input w-full px-4 py-3 rounded-xl text-sm" value={pkgPickup} onChange={e => setPkgPickup(e.target.value)} /></div>
             </div>

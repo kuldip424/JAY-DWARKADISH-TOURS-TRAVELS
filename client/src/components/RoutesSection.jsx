@@ -29,23 +29,23 @@ const RoutesSection = ({ onRouteSelect }) => {
                   console.log('Route clicked:', r.f, 'to', r.t);
                   onRouteSelect(r); 
                 }} 
-                className="route-item group flex items-center justify-between p-5 rounded-2xl border border-stone-200/60 bg-stone-50/50 cursor-pointer hover:bg-white hover:border-gold-300 hover:shadow-xl hover:shadow-gold-500/10 transition-all active:scale-[0.98]"
+                className="route-item group flex flex-col md:flex-row items-start md:items-center justify-between p-5 rounded-2xl border border-stone-200/60 bg-stone-50/50 cursor-pointer hover:bg-white hover:border-gold-300 hover:shadow-xl hover:shadow-gold-500/10 transition-all active:scale-[0.98]"
               >
-                <div className="flex-1">
+                <div className="flex-1 w-full md:w-auto">
                   <div className="flex items-center gap-3 mb-1">
                     <span className="text-[15px] font-bold text-stone-800">{r.f}</span>
                     <span className="iconify text-gold-500 text-sm" data-icon="mdi:arrow-right"></span>
                     <span className="text-[15px] font-bold text-stone-800">{r.t}</span>
                     {r.popular && <span className="text-[9px] font-bold bg-gold-100 text-gold-700 px-1.5 py-0.5 rounded uppercase tracking-tighter">Popular</span>}
                   </div>
-                  <div className="flex items-center gap-3 text-[12px] text-stone-400 font-medium">
+                  <div className="flex flex-wrap items-center gap-2 md:gap-3 text-[12px] text-stone-400 font-medium mt-1 md:mt-0">
                     <span className="flex items-center gap-1"><span className="iconify text-[14px]" data-icon="mdi:map-marker-distance"></span>{r.km} km</span>
                     <span className="flex items-center gap-1"><span className="iconify text-[14px]" data-icon="mdi:clock-outline"></span>{r.hr}</span>
-                    <span className="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg">Starts ₹{r.pr.toLocaleString()}</span>
+                    <span className="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg w-full md:w-auto mt-1 md:mt-0">Starts ₹{r.pr.toLocaleString()}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                   <span className="text-[12px] font-bold text-gold-600">Book Now</span>
+                <div className="flex items-center gap-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity mt-3 md:mt-0">
+                   <span className="hidden md:inline text-[12px] font-bold text-gold-600">Book Now</span>
                    <div className="w-8 h-8 rounded-full bg-gold-500 text-white flex items-center justify-center shadow-lg shadow-gold-500/20">
                      <span className="iconify text-lg" data-icon="mdi:chevron-right"></span>
                    </div>
