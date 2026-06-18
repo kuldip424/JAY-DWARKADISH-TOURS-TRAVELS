@@ -2,9 +2,14 @@
   "name": "jay-dwarkadish-tours",
   "version": "1.0.0",
   "scripts": {
-    "build": "cd client && npm install && npm run build && cp -R dist ../dist"
+    "build": "cd client && npm install && npm run build && cp -R dist ../dist",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "dependencies": {
     "nodemon": "^3.1.14"
+  },
+  "devDependencies": {
+    "wrangler": "^4.98.0"
   }
 }
