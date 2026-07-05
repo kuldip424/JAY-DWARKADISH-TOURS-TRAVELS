@@ -47,8 +47,10 @@ const Modals = ({ modalType, setModalType, selectedItem, modalData }) => {
     }
 
     if (!user || !user.token) {
-      addToast('Please login to book', 'info');
-      setShowAuth(true);
+      const msg = `Hi! Booking request:\n\n🕌 Package: ${modalData.title}\n📍 Pickup: ${pkgPickup}\n🚗 Car: ${pkgCar}\n👥 Passengers: ${pkgPassengers}\n💰 Price: ₹${modalData.price.toLocaleString()}\n📅 Date: ${pkgDate}\n👤 Name: ${pkgName}\n📱 Phone: ${pkgPhone}`;
+      window.open(`https://wa.me/917623862884?text=${encodeURIComponent(msg)}`, '_blank');
+      closeModal();
+      addToast('Opening WhatsApp...', 'success');
       return;
     }
 
@@ -92,8 +94,9 @@ const Modals = ({ modalType, setModalType, selectedItem, modalData }) => {
 
   const handleFareBooking = async () => {
     if (!user || !user.token) {
-      addToast('Please login to book', 'info');
-      setShowAuth(true);
+      window.open(getFareWaLink(), '_blank');
+      closeModal();
+      addToast('Opening WhatsApp...', 'success');
       return;
     }
 

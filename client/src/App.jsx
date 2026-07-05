@@ -17,6 +17,7 @@ import AdminDashboard from './components/AdminDashboard';
 import AdminLogin from './components/AdminLogin';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
+import Tours from './components/Tours';
 
 function App() {
   const [modalType, setModalType] = useState(null); // 'place', 'fare', 'pkg', 'all'
@@ -82,20 +83,20 @@ function App() {
   return (
     <div className="bg-stone-50 min-h-screen">
       {!isPageAdmin && (
-        <Navbar 
-          onLoginClick={() => setShowAuth(true)} 
-          onDashboardClick={() => navigate('/dashboard')} 
+        <Navbar
+          onLoginClick={() => setShowAuth(true)}
+          onDashboardClick={() => navigate('/dashboard')}
         />
       )}
 
       <Routes>
         <Route path="/" element={
           <>
-            <Hero 
-              setModalType={setModalType} 
-              setModalData={setModalData} 
-              carSelection={carSelection} 
-              setCarSelection={setCarSelection} 
+            <Hero
+              setModalType={setModalType}
+              setModalData={setModalData}
+              carSelection={carSelection}
+              setCarSelection={setCarSelection}
               preFill={preFill}
               setPreFill={setPreFill}
             />
@@ -126,7 +127,9 @@ function App() {
             <Footer />
           </>
         } />
-        
+
+        <Route path="/tour" element={<Tours />} />
+
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <Dashboard closeDashboard={() => navigate('/')} />
@@ -140,10 +143,10 @@ function App() {
           )
         } />
       </Routes>
-      
-      <Modals 
-        modalType={modalType} 
-        setModalType={setModalType} 
+
+      <Modals
+        modalType={modalType}
+        setModalType={setModalType}
         selectedItem={selectedItem}
         modalData={modalData}
       />

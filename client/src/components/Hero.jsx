@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import heroBgImg from '../assets/hero-bg.png';
 import { useToast } from '../context/ToastContext';
+import LocationPicker from './LocationPicker';
 
 const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFill, setPreFill }) => {
   const { addToast } = useToast();
@@ -14,6 +15,8 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
   const [tMode, setTMode] = useState('oneway');
   const [passengers, setPassengers] = useState(1);
   const [isPreFilling, setIsPreFilling] = useState(false);
+  const [isLocationPickerOpen, setIsLocationPickerOpen] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
 
   useEffect(() => {
     if (preFill) {
@@ -41,14 +44,69 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
     setToLoc(temp);
   };
 
-  const handleBook = (e) => {
+  const geocodeAddress = async (address) => {
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+      }
+      return null;
+    } catch (err) {
+      console.error('Geocoding error:', err);
+      return null;
+    }
+  };
+
+  const getDrivingDistance = async (fromCoords, toCoords) => {
+    try {
+      // OSRM expects: longitude,latitude
+      const url = `https://router.project-osrm.org/route/v1/driving/${fromCoords.lon},${fromCoords.lat};${toCoords.lon},${toCoords.lat}?overview=false`;
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
+        // Distance is returned in meters
+        return data.routes[0].distance / 1000;
+      }
+      return null;
+    } catch (err) {
+      console.error('Routing error:', err);
+      return null;
+    }
+  };
+
+  const handleBook = async (e) => {
     e.preventDefault();
     const maxPax = { Sedan: 4, SUV: 6, Tempo: 12 };
     if (passengers > maxPax[carSelection]) {
       addToast(`${carSelection} capacity is limited to ${maxPax[carSelection]} passengers.`, 'error');
       return;
     }
-    const km = Math.floor(Math.random() * 300) + 100;
+
+    setIsCalculating(true);
+    let km = 50; // Default fallback for local
+    
+    if (tripType !== 'local') {
+      const fromCoords = await geocodeAddress(fromLoc);
+      const toCoords = await geocodeAddress(toLoc);
+      
+      if (fromCoords && toCoords) {
+        const routeKm = await getDrivingDistance(fromCoords, toCoords);
+        if (routeKm) {
+          km = Math.ceil(routeKm);
+          if (tMode === 'round') {
+            km = km * 2; // Multiply by 2 for round trip
+          }
+        } else {
+          addToast('Could not calculate exact route, using estimate.', 'warning');
+          km = Math.floor(Math.random() * 300) + 100;
+        }
+      } else {
+        addToast('Could not find locations on map, using estimate.', 'warning');
+        km = Math.floor(Math.random() * 300) + 100;
+      }
+    }
+
     const rates = { Sedan: 11, SUV: 15, Tempo: 22 };
     const rate = rates[carSelection] || 11;
     const base = km * rate;
@@ -72,6 +130,7 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
       passengers
     });
     setModalType('fare');
+    setIsCalculating(false);
   };
 
   const scrollTo = (id) => document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -174,7 +233,15 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
                     <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block">From</label>
                     <div className="relative">
                       <span className="iconify absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500 text-xs" data-icon="mdi:circle-medium"></span>
-                      <input type="text" placeholder="Pickup city" required className="form-input w-full pl-8 pr-3 py-2.5 rounded-xl text-[13px]" value={fromLoc} onChange={e => setFromLoc(e.target.value)} />
+                      <input type="text" placeholder="Pickup city" required className="form-input w-full pl-8 pr-10 py-2.5 rounded-xl text-[13px]" value={fromLoc} onChange={e => setFromLoc(e.target.value)} />
+                      <button 
+                        type="button" 
+                        onClick={() => setIsLocationPickerOpen(true)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg hover:bg-stone-100 flex items-center justify-center text-stone-500 hover:text-gold-600 transition-colors"
+                        title="Choose on map"
+                      >
+                        <span className="iconify" data-icon="mdi:map-marker-radius"></span>
+                      </button>
                     </div>
                   </div>
                   
@@ -253,8 +320,12 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
                     <input type="tel" placeholder="+91 XXXXX" required className="form-input w-full px-4 py-2.5 rounded-xl text-[13px]" value={phone} onChange={e => setPhone(e.target.value)} />
                   </div>
                 </div>
-                <button type="submit" className="w-full btn-gold text-[15px] font-semibold py-4 rounded-full mt-2 flex items-center justify-center gap-2">
-                  <span className="iconify text-lg" data-icon="mdi:car-connected"></span>Get Fare & Book
+                <button type="submit" disabled={isCalculating} className="w-full btn-gold text-[15px] font-semibold py-4 rounded-full mt-2 flex items-center justify-center gap-2 disabled:opacity-70">
+                  {isCalculating ? (
+                    <><span className="iconify text-lg animate-spin" data-icon="mdi:loading"></span> Calculating Fare...</>
+                  ) : (
+                    <><span className="iconify text-lg" data-icon="mdi:car-connected"></span> Get Fare & Book</>
+                  )}
                 </button>
                 <p className="text-center text-[11px] text-stone-400">No advance payment • Free cancellation</p>
               </form>
@@ -268,6 +339,12 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
         <span className="text-[10px] text-stone-600 uppercase tracking-[0.2em]">Scroll</span>
         <div className="w-5 h-9 border border-stone-600 rounded-full flex justify-center pt-2"><div className="w-1 h-1 bg-gold-400 rounded-full animate-bounce"></div></div>
       </div>
+
+      <LocationPicker 
+        isOpen={isLocationPickerOpen} 
+        onClose={() => setIsLocationPickerOpen(false)} 
+        onSelect={(address) => setFromLoc(address)} 
+      />
     </section>
   );
 };
