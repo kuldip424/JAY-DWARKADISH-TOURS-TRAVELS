@@ -25,7 +25,7 @@ const AdminDashboard = ({ closeAdmin }) => {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/bookings/admin/all', {
+      const res = await fetch('https://jay-dwarkadish-tours-travels-1.onrender.com/api/bookings/admin/all', {
         headers: { 'Authorization': `Bearer ${userData.token}` }
       });
       const data = await res.json();
@@ -67,7 +67,7 @@ const AdminDashboard = ({ closeAdmin }) => {
   const updateStatus = async (id, status) => {
     const userData = JSON.parse(localStorage.getItem('admin_user'));
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${id}/status`, {
+      const res = await fetch(`https://jay-dwarkadish-tours-travels-1.onrender.com/api/bookings/${id}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

@@ -56,7 +56,7 @@ const Modals = ({ modalType, setModalType, selectedItem, modalData }) => {
 
     try {
       // Save to Database
-      const res = await fetch('http://localhost:5000/api/bookings', {
+      const res = await fetch('https://jay-dwarkadish-tours-travels-1.onrender.com/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ const Modals = ({ modalType, setModalType, selectedItem, modalData }) => {
 
     try {
       // Save to Database
-      const res = await fetch('http://localhost:5000/api/bookings', {
+      const res = await fetch('https://jay-dwarkadish-tours-travels-1.onrender.com/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -23,7 +23,7 @@ const Dashboard = ({ closeDashboard }) => {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/bookings', {
+      const res = await fetch('https://jay-dwarkadish-tours-travels-1.onrender.com/api/bookings', {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -57,7 +57,7 @@ const Dashboard = ({ closeDashboard }) => {
 
   const cancelBooking = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${id}/status`, {
+      const res = await fetch(`https://jay-dwarkadish-tours-travels-1.onrender.com/api/bookings/${id}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
