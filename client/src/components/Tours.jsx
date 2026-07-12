@@ -11,6 +11,7 @@ import junagadhImg from '../assets/junagadh.png';
 import diuImg from '../assets/diu.png';
 import souImg from '../assets/statue-of-unity.png';
 import ahmedabadImg from '../assets/ahmedabad.png';
+import heroTempleBg from '../assets/hero-temple.png';
 
 const tourData = {
   gujarat: [
@@ -149,7 +150,7 @@ const Tours = () => {
       {/* Hero Section */}
       <div className="relative py-24 md:py-32 bg-stone-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-stone-900 via-stone-900/90 to-transparent z-10"></div>
-        <img src="https://images.unsplash.com/photo-1545562083-a600704fa486?q=80&w=1920&auto=format&fit=crop" alt="Gujarat Tour" className="absolute inset-0 w-full h-full object-cover opacity-40" />
+        <img src={heroTempleBg} alt="Temple Tour" className="absolute inset-0 w-full h-full object-cover object-[center_20%] lg:object-top opacity-40" />
         
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-20">
           <div className="max-w-2xl reveal">

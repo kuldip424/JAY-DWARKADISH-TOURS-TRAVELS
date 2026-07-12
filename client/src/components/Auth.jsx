@@ -6,6 +6,7 @@ const Auth = ({ closeAuth }) => {
   const { addToast } = useToast();
   const { loginUser } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', password: '', phone: '' });
 
   const handleSubmit = async (e) => {
@@ -60,7 +61,7 @@ const Auth = ({ closeAuth }) => {
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-10">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center shadow-lg shadow-gold-500/20">
-                <span className="iconify text-white text-xl" data-icon="mdi:taxi-front"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
               </div>
               <div>
                 <span className="text-xl font-extrabold text-white">Dwarkesh</span>
@@ -124,7 +125,10 @@ const Auth = ({ closeAuth }) => {
                   <label className="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-1.5 block">Full Name</label>
                   <div className="relative">
                     <span className="iconify absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-lg" data-icon="mdi:account"></span>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className="form-input w-full pl-11 pr-4 py-3.5 rounded-xl text-sm" />
+                    <input type="text" name="name" value={formData.name} onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^[a-zA-Z\s]*$/.test(val) && val.length <= 30) handleChange(e);
+                    }} placeholder="John Doe" required minLength="3" maxLength="50" pattern="[A-Za-z\s]+" title="Name must contain only letters and spaces (3-50 characters)" className="form-input w-full pl-11 pr-4 py-3.5 rounded-xl text-sm" />
                   </div>
                 </div>
               )}
@@ -133,7 +137,7 @@ const Auth = ({ closeAuth }) => {
                 <label className="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-1.5 block">Email Address</label>
                 <div className="relative">
                   <span className="iconify absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-lg" data-icon="mdi:email"></span>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" required className="form-input w-full pl-11 pr-4 py-3.5 rounded-xl text-sm" />
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" required maxLength="30" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address" className="form-input w-full pl-11 pr-4 py-3.5 rounded-xl text-sm" />
                 </div>
               </div>
 
@@ -142,7 +146,10 @@ const Auth = ({ closeAuth }) => {
                   <label className="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-1.5 block">Phone Number</label>
                   <div className="relative">
                     <span className="iconify absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-lg" data-icon="mdi:phone"></span>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+91 XXXXX XXXXX" required className="form-input w-full pl-11 pr-4 py-3.5 rounded-xl text-sm" />
+                    <input type="tel" name="phone" value={formData.phone} onChange={(e) => {
+                      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                      handleChange(e);
+                    }} placeholder="9876543210" required minLength="10" maxLength="10" pattern="[0-9]{10}" title="Phone number must be exactly 10 digits" className="form-input w-full pl-11 pr-4 py-3.5 rounded-xl text-sm" />
                   </div>
                 </div>
               )}
@@ -154,7 +161,12 @@ const Auth = ({ closeAuth }) => {
                 </div>
                 <div className="relative">
                   <span className="iconify absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-lg" data-icon="mdi:lock"></span>
-                  <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="••••••••" required className="form-input w-full pl-11 pr-4 py-3.5 rounded-xl text-sm" />
+                  <input type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={(e) => {
+                    if (e.target.value.length <= 20) handleChange(e);
+                  }} placeholder="••••••••" required minLength="6" maxLength="20" title="Password must be at least 6 characters long" className="form-input w-full pl-11 pr-12 py-3.5 rounded-xl text-sm" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 transition-colors focus:outline-none">
+                    <span className="iconify text-[20px]" data-icon={showPassword ? "mdi:eye-off-outline" : "mdi:eye-outline"}></span>
+                  </button>
                 </div>
               </div>
 

@@ -20,7 +20,7 @@ const Navbar = ({ onLoginClick, onDashboardClick }) => {
           <div className="flex items-center justify-between h-20">
             <Link to="/" className="flex items-center gap-3 group relative z-10">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center shadow-lg shadow-gold-500/20 transition-transform duration-700 group-hover:rotate-[8deg] group-hover:scale-105">
-                <span className="iconify text-white text-xl" data-icon="mdi:taxi-front"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
               </div>
               <div className="flex flex-col -space-y-0.5">
                 <span className={`text-lg font-extrabold tracking-tight leading-none ${isScrolled ? 'text-stone-800' : 'text-white'}`}>Dwarkesh</span>

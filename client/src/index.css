@@ -136,3 +136,11 @@ body {
 .footer-wave::before { content: ''; position: absolute; top: -60px; left: 0; right: 0; height: 60px; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 60V30C480 0 960 60 1440 30V60H0Z' fill='%230F0E0C'/%3E%3C/svg%3E") no-repeat bottom center; background-size: cover; }
 
 select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%2378716C' viewBox='0 0 16 16'%3E%3Cpath d='M8 12L2 6h12L8 12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+
+/* === MOBILE FRIENDLY FIXES === */
+@media screen and (max-width: 768px) {
+  /* Prevent iOS Safari from zooming in on input fields by forcing 16px */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}

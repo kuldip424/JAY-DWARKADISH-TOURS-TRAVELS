@@ -313,11 +313,14 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block mt-3 md:mt-0">Your Name</label>
-                    <input type="text" placeholder="Name" required className="form-input w-full px-4 py-2.5 rounded-xl text-[13px]" value={name} onChange={e => setName(e.target.value)} />
+                    <input type="text" placeholder="Name" required minLength="3" maxLength="50" pattern="[A-Za-z\s]+" title="Name must contain only letters and spaces" className="form-input w-full px-4 py-2.5 rounded-xl text-[13px]" value={name} onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^[a-zA-Z\s]*$/.test(val) && val.length <= 50) setName(val);
+                    }} />
                   </div>
                   <div>
                     <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1 block mt-3 md:mt-0">Phone Number</label>
-                    <input type="tel" placeholder="+91 XXXXX" required className="form-input w-full px-4 py-2.5 rounded-xl text-[13px]" value={phone} onChange={e => setPhone(e.target.value)} />
+                    <input type="tel" placeholder="9876543210" required minLength="10" maxLength="10" pattern="[0-9]{10}" title="Phone number must be exactly 10 digits" className="form-input w-full px-4 py-2.5 rounded-xl text-[13px]" value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} />
                   </div>
                 </div>
                 <button type="submit" disabled={isCalculating} className="w-full btn-gold text-[15px] font-semibold py-4 rounded-full mt-2 flex items-center justify-center gap-2 disabled:opacity-70">
