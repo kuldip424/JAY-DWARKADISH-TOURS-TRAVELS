@@ -50,7 +50,7 @@ const Auth = ({ closeAuth }) => {
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-stone-950/80 backdrop-blur-md" onClick={closeAuth}></div>
       
-      <div className="relative bg-white rounded-[32px] w-full max-w-4xl shadow-2xl overflow-hidden flex animate-slide-down min-h-[600px]">
+      <div className="relative bg-white rounded-[32px] w-full max-w-4xl shadow-2xl overflow-hidden flex animate-slide-down h-auto max-h-[90vh] lg:min-h-[600px]">
         
         {/* Left Side: Art & Branding */}
         <div className="hidden lg:flex flex-col justify-between w-5/12 relative bg-stone-900 p-10 text-white overflow-hidden">
@@ -97,7 +97,7 @@ const Auth = ({ closeAuth }) => {
         </div>
 
         {/* Right Side: Forms */}
-        <div className="w-full lg:w-7/12 p-8 md:p-12 lg:p-16 relative flex flex-col justify-center bg-stone-50">
+        <div className="w-full lg:w-7/12 p-6 sm:p-8 md:p-12 lg:p-16 relative flex flex-col justify-center bg-stone-50 overflow-y-auto">
           <button onClick={closeAuth} className="absolute top-6 right-6 w-10 h-10 bg-white border border-stone-200 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-800 hover:border-stone-300 transition-all shadow-sm">
             <span className="iconify" data-icon="mdi:close"></span>
           </button>

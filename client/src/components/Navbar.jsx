@@ -101,10 +101,17 @@ const Navbar = ({ onLoginClick, onDashboardClick }) => {
               Book Now
             </a>
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => { toggleDrawer(); onLoginClick(); }} className="flex items-center justify-center gap-2 py-3.5 bg-stone-100 text-stone-800 rounded-xl text-[13px] font-bold hover:bg-stone-200 transition-colors">
-                <span className="iconify text-lg" data-icon="mdi:account-circle-outline"></span>
-                Login
-              </button>
+              {localStorage.getItem('user') ? (
+                <button onClick={() => { localStorage.removeItem('user'); window.location.reload(); }} className="flex items-center justify-center gap-2 py-3.5 bg-red-100 text-red-700 rounded-xl text-[13px] font-bold hover:bg-red-200 transition-colors">
+                  <span className="iconify text-lg" data-icon="mdi:logout"></span>
+                  Logout
+                </button>
+              ) : (
+                <button onClick={() => { toggleDrawer(); onLoginClick(); }} className="flex items-center justify-center gap-2 py-3.5 bg-stone-100 text-stone-800 rounded-xl text-[13px] font-bold hover:bg-stone-200 transition-colors">
+                  <span className="iconify text-lg" data-icon="mdi:account-circle-outline"></span>
+                  Login
+                </button>
+              )}
               <a href="tel:+917623862884" className="flex items-center justify-center gap-2 py-3.5 bg-stone-900 text-white rounded-xl text-[13px] font-bold hover:bg-stone-800 transition-colors">
                 <span className="iconify text-gold-400 text-lg" data-icon="mdi:phone"></span>
                 Call
