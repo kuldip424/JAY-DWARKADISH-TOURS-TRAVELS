@@ -265,10 +265,11 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
                   </div>
                 </div>
                 <button type="submit" disabled={isCalculating} className="w-full btn-gold text-[15px] font-semibold py-4 rounded-full mt-2 flex items-center justify-center gap-2 disabled:opacity-70">
+                  {/* Keyed wrapper: Iconify replaces the icon <span>, so React swaps the wrapper instead */}
                   {isCalculating ? (
-                    <><span className="iconify text-lg animate-spin" data-icon="mdi:loading"></span> Calculating Fare...</>
+                    <span key="calculating" className="flex items-center gap-2"><span className="iconify text-lg animate-spin" data-icon="mdi:loading"></span> Calculating Fare...</span>
                   ) : (
-                    <><span className="iconify text-lg" data-icon="mdi:car-connected"></span> Get Fare & Book</>
+                    <span key="ready" className="flex items-center gap-2"><span className="iconify text-lg" data-icon="mdi:car-connected"></span> Get Fare & Book</span>
                   )}
                 </button>
                 <p className="text-center text-[11px] text-stone-400">No advance payment • Free cancellation</p>

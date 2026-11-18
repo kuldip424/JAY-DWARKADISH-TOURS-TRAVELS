@@ -66,13 +66,15 @@ const AdminLoginPage = () => {
               disabled={loading}
               className="w-full bg-gradient-to-r from-gold-400 to-gold-600 text-white font-bold py-4 rounded-2xl shadow-xl shadow-gold-600/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:scale-100"
             >
+              {/* Icons are wrapped: Iconify swaps the inner <span> for an <svg>,
+                  so React must only ever add/remove the wrapper */}
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
-                <>
+                <span className="flex items-center gap-3">
                   <span className="iconify text-xl" data-icon="mdi:login-variant"></span>
                   Authorize Access
-                </>
+                </span>
               )}
             </button>
           </form>

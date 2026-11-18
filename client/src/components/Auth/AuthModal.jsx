@@ -142,10 +142,11 @@ const AuthModal = ({ closeAuth }) => {
               </div>
 
               <button type="submit" disabled={loading} className="disabled:opacity-60 w-full btn-gold text-[15px] font-bold py-4 rounded-xl mt-6 flex items-center justify-center gap-2 shadow-lg shadow-gold-500/20">
+                {/* Keyed wrapper: Iconify replaces the icon <span>, so React swaps the wrapper instead */}
                 {isLogin ? (
-                  <><span className="iconify text-lg" data-icon="mdi:login"></span> Sign In</>
+                  <span key="login" className="flex items-center gap-2"><span className="iconify text-lg" data-icon="mdi:login"></span> Sign In</span>
                 ) : (
-                  <><span className="iconify text-lg" data-icon="mdi:account-plus"></span> Create Account</>
+                  <span key="register" className="flex items-center gap-2"><span className="iconify text-lg" data-icon="mdi:account-plus"></span> Create Account</span>
                 )}
               </button>
             </form>
