@@ -1,13 +1,11 @@
-const express = require('express');
+import express from 'express';
+import protectRoute from '../middlewares/protectRoute.js';
+import { getRides, postRide, putRideStatus } from '../controllers/rides.controller.js';
+
 const router = express.Router();
-const { requestRide, getRides, updateRideStatus } = require('../controllers/rideController');
-const { protect } = require('../middleware/auth');
 
-router.route('/')
-    .post(protect, requestRide)
-    .get(protect, getRides);
+router.post('/', protectRoute, postRide);
+router.get('/', protectRoute, getRides);
+router.put('/:id', protectRoute, putRideStatus);
 
-router.route('/:id')
-    .put(protect, updateRideStatus);
-
-module.exports = router;
+export default router;

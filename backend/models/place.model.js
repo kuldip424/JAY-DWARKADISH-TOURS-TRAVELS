@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const placeSchema = new mongoose.Schema({
     slug: { type: String, required: true, unique: true },
@@ -13,4 +13,4 @@ const placeSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
-module.exports = mongoose.model('Place', placeSchema);
+export default mongoose.model('Place', placeSchema);

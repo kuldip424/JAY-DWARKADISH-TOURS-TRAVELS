@@ -14,10 +14,10 @@ export function useAuth() {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const data = await loginApi(email, password);
-      session.setUser(data);
-      setUser(data);
-      addToast(`Welcome back, ${data.name}!`, 'success');
+      const { user: account } = await loginApi(email, password); // { success, user }
+      session.setUser(account);
+      setUser(account);
+      addToast(`Welcome back, ${account.name}!`, 'success');
       return true;
     } catch (e) {
       addToast(apiError(e, 'Login failed'), 'error');
@@ -50,13 +50,13 @@ export function useAuth() {
   const adminLogin = async (email, password) => {
     setLoading(true);
     try {
-      const data = await loginApi(email, password);
-      if (data.role !== 'admin') {
+      const { user: account } = await loginApi(email, password);
+      if (account.role !== 'admin') {
         addToast('Access denied. This portal is for administrators only.', 'error');
         return false;
       }
-      session.setAdmin(data);
-      setAdminUser(data);
+      session.setAdmin(account);
+      setAdminUser(account);
       addToast('Welcome back, Administrator!', 'success');
       return true;
     } catch (e) {

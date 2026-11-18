@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const rideSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -15,4 +15,4 @@ const rideSchema = new mongoose.Schema({
     duration: { type: String }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Ride', rideSchema);
+export default mongoose.model('Ride', rideSchema);

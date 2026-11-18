@@ -46,7 +46,7 @@ export function useAdminBookings() {
   const fetchBookings = useCallback(async () => {
     if (!token) return; // AdminRoute shows the login form instead
     try {
-      const sorted = sortBookings(await listAllBookingsApi(token));
+      const sorted = sortBookings((await listAllBookingsApi(token)).bookings || []); // { success, bookings }
 
       if (previousCount.current > 0 && sorted.length > previousCount.current) {
         addToast(`${sorted.length - previousCount.current} New booking request(s) received!`, 'info');

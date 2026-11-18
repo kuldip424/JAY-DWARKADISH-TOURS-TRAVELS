@@ -18,7 +18,7 @@ export function useMyBookings() {
   const fetchBookings = useCallback(async () => {
     if (!token) return; // ProtectedRoute redirects logged-out users
     try {
-      const data = await listMyBookingsApi(token);
+      const data = (await listMyBookingsApi(token)).bookings || []; // { success, bookings }
 
       // Tell the user when the admin accepted or completed a booking
       data.forEach((b) => {

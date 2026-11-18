@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const packageSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -13,4 +13,4 @@ const packageSchema = new mongoose.Schema({
     isActive: { type: Boolean, default: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Package', packageSchema);
+export default mongoose.model('Package', packageSchema);

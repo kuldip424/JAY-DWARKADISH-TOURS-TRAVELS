@@ -1,35 +1,14 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import { authenticateToken } from '../services/auth/auth.service.js';
+import sendError from '../utils/sendError.js';
 
-const protect = async (req, res, next) => {
-    let token;
-
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        try {
-            token = req.headers.authorization.split(' ')[1];
-            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret123');
-            const user = await User.findById(decoded.id).select('-password');
-            if (!user) {
-                return res.status(401).json({ message: 'Not authorized, user no longer exists' });
-            }
-            req.user = user;
-            next();
-        } catch (error) {
-            return res.status(401).json({ message: 'Not authorized, token failed' });
-        }
-    }
-
-    if (!token) {
-        return res.status(401).json({ message: 'Not authorized, no token' });
-    }
+// Requires "Authorization: Bearer <token>" and puts the logged-in user on req.user
+const protectRoute = async (req, res, next) => {
+  try {
+    req.user = await authenticateToken(req.headers.authorization);
+  } catch (e) {
+    return sendError(res, e);
+  }
+  next();
 };
 
-const admin = (req, res, next) => {
-    if (req.user && req.user.role === 'admin') {
-        next();
-    } else {
-        return res.status(401).json({ message: 'Not authorized as an admin' });
-    }
-};
-
-module.exports = { protect, admin };
+export default protectRoute;

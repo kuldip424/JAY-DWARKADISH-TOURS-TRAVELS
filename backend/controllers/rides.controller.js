@@ -1,47 +1,32 @@
-const Ride = require('../models/Ride');
+import { changeRideStatus, listRides, requestRide } from '../services/rides/rides.service.js';
+import sendError from '../utils/sendError.js';
 
-exports.requestRide = async (req, res) => {
-    try {
-        const { pickup, destination, fare } = req.body;
-        const ride = await Ride.create({
-            user: req.user.id,
-            pickup,
-            destination,
-            fare
-        });
-        res.status(201).json(ride);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+// POST /api/rides
+export const postRide = async (req, res) => {
+  try {
+    const ride = await requestRide(req.user, req.body || {});
+    res.status(201).json({ success: true, ride });
+  } catch (e) {
+    sendError(res, e);
+  }
 };
 
-exports.getRides = async (req, res) => {
-    try {
-        const query = req.user.role === 'driver' ? { status: 'pending' } : { user: req.user.id };
-        const rides = await Ride.find(query).populate('user', 'name phone').sort('-createdAt');
-        res.json(rides);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+// GET /api/rides
+export const getRides = async (req, res) => {
+  try {
+    const rides = await listRides(req.user);
+    res.json({ success: true, rides });
+  } catch (e) {
+    sendError(res, e);
+  }
 };
 
-exports.updateRideStatus = async (req, res) => {
-    try {
-        const { status } = req.body;
-        const ride = await Ride.findById(req.params.id);
-
-        if (!ride) {
-            return res.status(404).json({ message: 'Ride not found' });
-        }
-
-        if (req.user.role === 'driver' && status === 'accepted') {
-            ride.driver = req.user.id;
-        }
-
-        ride.status = status;
-        await ride.save();
-        res.json(ride);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+// PUT /api/rides/:id
+export const putRideStatus = async (req, res) => {
+  try {
+    const ride = await changeRideStatus(req.user, req.params.id, req.body?.status);
+    res.json({ success: true, ride });
+  } catch (e) {
+    sendError(res, e);
+  }
 };

@@ -1,10 +1,12 @@
-const express = require('express');
+import express from 'express';
+import protectRoute from '../middlewares/protectRoute.js';
+import protectAdmin from '../middlewares/protectAdmin.js';
+import { getPackages, getPlaces, postSeed } from '../controllers/content.controller.js';
+
 const router = express.Router();
-const { getPlaces, getPackages, seedContent } = require('../controllers/contentController');
-const { protect } = require('../middleware/auth');
 
 router.get('/places', getPlaces);
 router.get('/packages', getPackages);
-router.post('/seed', protect, seedContent); // Usually admin only, but for now protect is fine
+router.post('/seed', protectRoute, protectAdmin, postSeed); // wipes and re-creates content
 
-module.exports = router;
+export default router;
