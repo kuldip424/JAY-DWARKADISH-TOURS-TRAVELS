@@ -1,10 +1,9 @@
 import sedanImg from '@/assets/sedan.png';
 import ertigaImg from '@/assets/ertiga.jpg';
-import { useToast } from '@/hooks/ui/useToast';
+import toast from 'react-hot-toast';
 import { CAR_CAPACITY, CAR_RATE_PER_KM } from '@/config/booking';
 
 const Fleet = ({ setCarSelection }) => {
-  const { addToast } = useToast();
   // `type` links each card to the booking form; prices come from config/booking.js
   const cars = [
     { type: 'Sedan', name: 'Swift Dzire', price: CAR_RATE_PER_KM.Sedan, desc: 'Perfect for solo & couple travelers. AC Sedan with good luggage space.', img: sedanImg, popular: true, cap: CAR_CAPACITY.Sedan, bag: 2 },
@@ -42,7 +41,7 @@ const Fleet = ({ setCarSelection }) => {
                   <button onClick={() => {
                     setCarSelection(car.type);
                     document.querySelector('#booking')?.scrollIntoView({ behavior: 'smooth' });
-                    addToast(`${car.name} selected! Fill trip details.`, 'info');
+                    toast(`${car.name} selected! Fill trip details.`);
                   }} className="btn-outline text-[13px] font-semibold px-6 py-2.5 rounded-full">Select</button>
                 </div>
               </div>

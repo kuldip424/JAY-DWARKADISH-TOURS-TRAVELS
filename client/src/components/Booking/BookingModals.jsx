@@ -5,7 +5,7 @@ import nageshwarImg from '@/assets/nageshwar.jpg';
 import betDwarkaImg from '@/assets/bet-dwarka.png';
 import bhadkeshwarImg from '@/assets/bhadkeshwar.png';
 import shivrajpurImg from '@/assets/shivrajpur.png';
-import { useToast } from '@/hooks/ui/useToast';
+import toast from 'react-hot-toast';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useCreateBooking } from '@/hooks/bookings/useCreateBooking';
 import { CAR_TYPES, CAR_CAPACITY } from '@/config/booking';
@@ -25,7 +25,6 @@ const P = {
 };
 
 const BookingModals = ({ modalType, setModalType, selectedItem, setSelectedItem, modalData }) => {
-  const { addToast } = useToast();
   const { user } = useAuth();
   const { createBooking, saving } = useCreateBooking();
   const [pkgName, setPkgName] = useState('');
@@ -49,7 +48,7 @@ const BookingModals = ({ modalType, setModalType, selectedItem, setSelectedItem,
     if (!user?.token) {
       window.open(waLink, '_blank');
       closeModal();
-      addToast('Opening WhatsApp...', 'success');
+      toast.success('Opening WhatsApp...');
       return;
     }
 
@@ -66,12 +65,12 @@ const BookingModals = ({ modalType, setModalType, selectedItem, setSelectedItem,
 
   const confirmPkg = () => {
     if (!pkgName || !pkgPhone || !pkgDate || !pkgPickup) {
-      addToast('Please fill all fields', 'error');
+      toast.error('Please fill all fields');
       return;
     }
 
     if (pkgPassengers > CAR_CAPACITY[pkgCar]) {
-      addToast(`${pkgCar} capacity is limited to ${CAR_CAPACITY[pkgCar]} passengers.`, 'error');
+      toast.error(`${pkgCar} capacity is limited to ${CAR_CAPACITY[pkgCar]} passengers.`);
       return;
     }
 
@@ -86,8 +85,8 @@ const BookingModals = ({ modalType, setModalType, selectedItem, setSelectedItem,
         carType: pkgCar,
         passengers: pkgPassengers
       },
-      customerInfo: { name: pkgName, phone: pkgPhone },
-      fare: { total: modalData.price }
+      customerInfo: { name: pkgName, phone: pkgPhone }
+      // no fare: the server prices the package itself
     }, waLink, 'Booking saved and WhatsApp initiated!');
   };
 
@@ -100,11 +99,12 @@ const BookingModals = ({ modalType, setModalType, selectedItem, setSelectedItem,
         date: modalData.date,
         time: modalData.time,
         tMode: modalData.tMode,
+        distanceKm: modalData.km,
         carType: modalData.carType,
         passengers: modalData.passengers
       },
-      customerInfo: { name: modalData.name, phone: modalData.phone },
-      fare: { total: modalData.total, base: modalData.base, allowance: modalData.allow }
+      customerInfo: { name: modalData.name, phone: modalData.phone }
+      // no fare: the server works it out from the distance and its own rates
     }, getFareWaLink(), 'Ride booking saved!');
   };
 

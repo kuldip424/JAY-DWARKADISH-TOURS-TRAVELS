@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useToast } from '@/hooks/ui/useToast';
+import toast from 'react-hot-toast';
 import { searchPlaceApi, getDrivingRouteApi } from '@/api/mapApi';
 import { CAR_RATE_PER_KM, DRIVER_ALLOWANCE, LOCAL_TRIP_KM } from '@/config/booking';
 
@@ -27,7 +27,6 @@ async function findDrivingKm(from, to) {
 
 // Works out trip distance and fare for the ride booking form.
 export function useFareCalculator() {
-  const { addToast } = useToast();
   const [isCalculating, setIsCalculating] = useState(false);
 
   // Trip distance in km, or null if the route can't be found
@@ -35,13 +34,13 @@ export function useFareCalculator() {
     const fromCoords = await findPlace(from);
     const toCoords = await findPlace(to);
     if (!fromCoords || !toCoords) {
-      addToast('Could not find these locations on the map. Please check them, or book on WhatsApp.', 'error');
+      toast.error('Could not find these locations on the map. Please check them, or book on WhatsApp.');
       return null;
     }
 
     const routeKm = await findDrivingKm(fromCoords, toCoords);
     if (routeKm == null) {
-      addToast('Could not calculate the route. Please try again, or book on WhatsApp.', 'error');
+      toast.error('Could not calculate the route. Please try again, or book on WhatsApp.');
       return null;
     }
 

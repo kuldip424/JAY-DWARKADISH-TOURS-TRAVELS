@@ -6,18 +6,20 @@ import { getWhatsAppLink, toWhatsAppNumber } from '@/utils/whatsapp';
 
 const AdminDashboardPage = () => {
   const { adminLogout } = useAuth();
-  const { bookings, stats, loading, refetch, updateStatus } = useAdminBookings();
+  const [activeTab, setActiveTab] = useState('pending');
+  // The server filters, sorts and pages the list
+  const { bookings, stats, page, setPage, totalPages, loading, refetch, updateStatus } =
+    useAdminBookings(activeTab);
   const navigate = useNavigate();
   const closeAdmin = () => navigate('/');
-  const [activeTab, setActiveTab] = useState('pending');
 
   // AdminRoute shows the login form again once the admin is logged out
   const handleLogout = () => adminLogout();
 
-  const filtered = bookings.filter(b => {
-    if (activeTab === 'all') return true;
-    return b.status === activeTab;
-  });
+  const showTab = (tab) => {
+    setActiveTab(tab);
+    setPage(1); // a new filter starts at the first page
+  };
 
   return (
     <div className="fixed inset-0 z-[160] flex flex-col bg-stone-100 animate-fade-in overflow-hidden">
@@ -85,7 +87,7 @@ const AdminDashboardPage = () => {
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600"><span className="iconify text-2xl" data-icon="mdi:account-group"></span></div>
                 <span className="text-[11px] font-bold text-blue-500">Active Users</span>
               </div>
-              <div className="text-3xl font-black text-stone-900">{[...new Set(bookings.map(b => b.user?._id))].length}</div>
+              <div className="text-3xl font-black text-stone-900">{stats.customers}</div>
             </div>
           </div>
 
@@ -95,7 +97,7 @@ const AdminDashboardPage = () => {
               {['all', 'pending', 'confirmed', 'completed', 'cancelled'].map(t => (
                 <button 
                   key={t} 
-                  onClick={() => setActiveTab(t)}
+                  onClick={() => showTab(t)}
                   className={`px-6 py-2.5 rounded-xl text-[12px] font-bold capitalize transition-all ${activeTab === t ? 'bg-stone-900 text-white' : 'text-stone-500 hover:bg-stone-100'}`}
                 >
                   {t} {t === 'pending' && stats.pending > 0 && <span className="ml-1 bg-amber-500 text-white px-1.5 rounded-full text-[10px]">{stats.pending}</span>}
@@ -124,9 +126,9 @@ const AdminDashboardPage = () => {
                 <tbody className="divide-y divide-stone-50">
                   {loading ? (
                     <tr><td colSpan="6" className="py-20 text-center"><div className="w-8 h-8 border-4 border-gold-500/20 border-t-gold-500 rounded-full animate-spin mx-auto"></div></td></tr>
-                  ) : filtered.length === 0 ? (
+                  ) : bookings.length === 0 ? (
                     <tr><td colSpan="6" className="py-20 text-center text-stone-400 font-medium">No bookings found in this category.</td></tr>
-                  ) : filtered.map((b) => (
+                  ) : bookings.map((b) => (
                     <tr key={b._id} className="hover:bg-stone-50/50 transition-colors">
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-3">
@@ -208,6 +210,27 @@ const AdminDashboardPage = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Pager: the server sends 25 bookings at a time */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-8 py-5 border-t border-stone-100">
+                <button
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                  className="flex items-center gap-2 text-[13px] font-bold px-4 py-2 rounded-xl text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent transition-all"
+                >
+                  <span className="iconify" data-icon="mdi:chevron-left"></span> Previous
+                </button>
+                <span className="text-[12px] font-bold text-stone-400">Page {page} of {totalPages}</span>
+                <button
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === totalPages}
+                  className="flex items-center gap-2 text-[13px] font-bold px-4 py-2 rounded-xl text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent transition-all"
+                >
+                  Next <span className="iconify" data-icon="mdi:chevron-right"></span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

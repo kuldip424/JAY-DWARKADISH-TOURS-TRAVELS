@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast';
 import AppRoutes from '@/routes/AppRoutes';
 import AuthModal from '@/components/Auth/AuthModal';
 import WhatsAppButton from '@/components/Common/WhatsAppButton';
@@ -14,6 +15,7 @@ function App() {
 
       {showAuth && <AuthModal closeAuth={() => setShowAuth(false)} />}
       <WhatsAppButton />
+      <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
     </div>
   );
 }

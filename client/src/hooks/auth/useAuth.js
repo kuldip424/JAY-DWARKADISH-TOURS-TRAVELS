@@ -1,14 +1,13 @@
-import { useCallback, useContext, useState } from 'react';
-import { AuthContext } from '@/context/AuthContext';
-import { useToast } from '@/hooks/ui/useToast';
+import { useCallback, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useAuthStore } from '@/zustand/auth/useAuth.Zus';
 import { apiError } from '@/api/apiClient';
 import { loginApi, registerApi } from '@/api/authApi';
 import { session } from '@/utils/session';
 
 // Logged-in user/admin + login/register/logout actions.
 export function useAuth() {
-  const { user, setUser, adminUser, setAdminUser, showAuth, setShowAuth } = useContext(AuthContext);
-  const { addToast } = useToast();
+  const { user, setUser, adminUser, setAdminUser, showAuth, setShowAuth } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
   const login = async (email, password) => {
@@ -17,10 +16,10 @@ export function useAuth() {
       const { user: account } = await loginApi(email, password); // { success, user }
       session.setUser(account);
       setUser(account);
-      addToast(`Welcome back, ${account.name}!`, 'success');
+      toast.success(`Welcome back, ${account.name}!`);
       return true;
     } catch (e) {
-      addToast(apiError(e, 'Login failed'), 'error');
+      toast.error(apiError(e, 'Login failed'));
       return false;
     } finally {
       setLoading(false);
@@ -31,10 +30,10 @@ export function useAuth() {
     setLoading(true);
     try {
       await registerApi(formData);
-      addToast('Account created! Please login.', 'success');
+      toast.success('Account created! Please login.');
       return true;
     } catch (e) {
-      addToast(apiError(e, 'Registration failed'), 'error');
+      toast.error(apiError(e, 'Registration failed'));
       return false;
     } finally {
       setLoading(false);
@@ -52,15 +51,15 @@ export function useAuth() {
     try {
       const { user: account } = await loginApi(email, password);
       if (account.role !== 'admin') {
-        addToast('Access denied. This portal is for administrators only.', 'error');
+        toast.error('Access denied. This portal is for administrators only.');
         return false;
       }
       session.setAdmin(account);
       setAdminUser(account);
-      addToast('Welcome back, Administrator!', 'success');
+      toast.success('Welcome back, Administrator!');
       return true;
     } catch (e) {
-      addToast(apiError(e, 'Login failed'), 'error');
+      toast.error(apiError(e, 'Login failed'));
       return false;
     } finally {
       setLoading(false);
@@ -82,7 +81,7 @@ export function useAuth() {
     login,
     register,
     logout,
-    adminLogin,
     adminLogout,
+    adminLogin,
   };
 }

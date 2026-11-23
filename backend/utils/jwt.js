@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-// Read at call time so dotenv has loaded. Set JWT_SECRET in production:
-// the fallback is only meant for local development.
-const secret = () => process.env.JWT_SECRET || 'secret123';
+// JWT_SECRET must be set: server.js refuses to start without it.
+// Read at call time so dotenv has loaded.
+const secret = () => process.env.JWT_SECRET;
 
 export const signToken = (userId) => jwt.sign({ id: userId }, secret(), { expiresIn: '30d' });
 

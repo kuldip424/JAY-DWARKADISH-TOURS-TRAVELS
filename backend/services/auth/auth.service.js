@@ -10,6 +10,11 @@ import {
 
 export const DEFAULT_ADMIN_PASSWORD = 'admin123';
 
+const MIN_PASSWORD_LENGTH = 6;
+
+// Emails are stored lowercase and trimmed, so every lookup uses the same form
+const normalizeEmail = (email) => String(email || '').trim().toLowerCase();
+
 // What the client receives after login/register
 const toAuthUser = (user) => ({
   _id: user._id,
@@ -21,17 +26,23 @@ const toAuthUser = (user) => ({
 
 export const registerUser = async ({ name, email, password, phone }) => {
   if (!email || !password) throw httpError(400, 'Please provide email and password');
-  if (await findUserByEmail(email)) throw httpError(400, 'User already exists');
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    throw httpError(400, `Password must be at least ${MIN_PASSWORD_LENGTH} characters`);
+  }
+
+  const cleanEmail = normalizeEmail(email);
+  if (await findUserByEmail(cleanEmail)) throw httpError(400, 'User already exists');
 
   // A `role` sent by the client is ignored: public sign-ups are always normal users
-  const user = await createUser({ name, email, password, phone });
+  // (a duplicate email slipping past the check above is caught by the unique index)
+  const user = await createUser({ name, email: cleanEmail, password, phone });
   return toAuthUser(user);
 };
 
 export const loginUser = async ({ email, password }) => {
   if (!email || !password) throw httpError(400, 'Please provide email and password');
 
-  const user = await findUserByEmail(email);
+  const user = await findUserByEmail(normalizeEmail(email));
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw httpError(401, 'Invalid email or password');
   }
@@ -61,7 +72,8 @@ export const authenticateToken = async (authHeader = '') => {
 };
 
 // Makes an existing user an admin, or creates a new admin account (used by admin-setup.js)
-export const promoteToAdmin = async (email) => {
+export const promoteToAdmin = async (rawEmail) => {
+  const email = normalizeEmail(rawEmail);
   const existing = await updateUserRoleByEmail(email, 'admin');
   if (existing) return { user: existing, created: false };
 

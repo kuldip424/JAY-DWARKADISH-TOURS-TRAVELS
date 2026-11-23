@@ -1,18 +1,17 @@
 import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { useAuth } from '@/hooks/auth/useAuth';
-import { useToast } from '@/hooks/ui/useToast';
 
 const ProtectedRoute = ({ children }) => {
   const { user, setShowAuth } = useAuth();
-  const { addToast } = useToast();
 
   useEffect(() => {
     if (!user) {
-      addToast('Please login to access this page.', 'error');
+      toast.error('Please login to access this page.');
       setShowAuth(true);
     }
-  }, [user, setShowAuth, addToast]);
+  }, [user, setShowAuth]);
 
   if (!user) {
     return <Navigate to="/" replace />;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useAuth } from '@/hooks/auth/useAuth';
-import { useToast } from '@/hooks/ui/useToast';
 import { apiError, isUnauthorized } from '@/api/apiClient';
 import { listMyBookingsApi, updateBookingStatusApi } from '@/api/bookingsApi';
 import { BOOKINGS_POLL_INTERVAL } from '@/config/app';
@@ -9,7 +9,6 @@ import { shortBookingId } from '@/utils/format';
 // The logged-in user's bookings, refreshed every 30s, plus cancel.
 export function useMyBookings() {
   const { user, logout } = useAuth();
-  const { addToast } = useToast();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const previous = useRef([]); // last fetched list, to spot status changes
@@ -25,9 +24,9 @@ export function useMyBookings() {
         const old = previous.current.find((p) => p._id === b._id);
         if (!old || old.status === b.status) return;
         if (b.status === 'confirmed') {
-          addToast(`Your booking #${shortBookingId(b._id)} has been ACCEPTED!`, 'success');
+          toast.success(`Your booking #${shortBookingId(b._id)} has been ACCEPTED!`);
         } else if (b.status === 'completed') {
-          addToast(`Your trip #${shortBookingId(b._id)} is marked as completed. Thank you!`, 'info');
+          toast(`Your trip #${shortBookingId(b._id)} is marked as completed. Thank you!`);
         }
       });
 
@@ -36,11 +35,11 @@ export function useMyBookings() {
     } catch (e) {
       // Expired login: log out, ProtectedRoute then asks the user to log in again
       if (isUnauthorized(e)) logout();
-      else addToast(apiError(e, 'Failed to load bookings'), 'error');
+      else toast.error(apiError(e, 'Failed to load bookings'));
     } finally {
       setLoading(false);
     }
-  }, [token, addToast, logout]);
+  }, [token, logout]);
 
   useEffect(() => {
     // State is only set after the request resolves (lint false positive for async)
@@ -54,14 +53,14 @@ export function useMyBookings() {
     async (id) => {
       try {
         await updateBookingStatusApi(id, 'cancelled', token);
-        addToast('Booking cancelled successfully', 'success');
+        toast.success('Booking cancelled successfully');
         fetchBookings();
       } catch (e) {
         if (isUnauthorized(e)) logout();
-        else addToast(apiError(e, 'Failed to cancel booking'), 'error');
+        else toast.error(apiError(e, 'Failed to cancel booking'));
       }
     },
-    [token, addToast, fetchBookings, logout]
+    [token, fetchBookings, logout]
   );
 
   return { bookings, loading, cancelBooking };

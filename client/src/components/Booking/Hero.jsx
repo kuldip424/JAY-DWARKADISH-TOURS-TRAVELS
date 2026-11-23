@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import heroBgImg from '@/assets/hero-bg.png';
-import { useToast } from '@/hooks/ui/useToast';
+import toast from 'react-hot-toast';
 import { useFareCalculator } from '@/hooks/bookings/useFareCalculator';
 import { CAR_TYPES, CAR_CAPACITY } from '@/config/booking';
 import { todayISO } from '@/utils/format';
@@ -9,7 +9,6 @@ import LocationPicker from './LocationPicker';
 
 // Hero section with the ride booking form (calculates the fare, then opens the fare modal)
 const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFill, setPreFill }) => {
-  const { addToast } = useToast();
   const [tripType, setTripType] = useState('outstation');
   const [fromLoc, setFromLoc] = useState('');
   const [toLoc, setToLoc] = useState('');
@@ -51,7 +50,7 @@ const Hero = ({ setModalType, setModalData, carSelection, setCarSelection, preFi
   const handleBook = async (e) => {
     e.preventDefault();
     if (passengers > CAR_CAPACITY[carSelection]) {
-      addToast(`${carSelection} capacity is limited to ${CAR_CAPACITY[carSelection]} passengers.`, 'error');
+      toast.error(`${carSelection} capacity is limited to ${CAR_CAPACITY[carSelection]} passengers.`);
       return;
     }
 

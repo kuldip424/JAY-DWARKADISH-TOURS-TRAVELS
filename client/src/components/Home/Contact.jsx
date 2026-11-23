@@ -1,12 +1,11 @@
-import { useToast } from '@/hooks/ui/useToast';
+import toast from 'react-hot-toast';
 import { getWhatsAppLink } from '@/utils/whatsapp';
 import { CALL_LINK, PHONE_DISPLAY } from '@/config/app';
 
 const Contact = () => {
-  const { addToast } = useToast();
   const handleContact = (e) => {
     e.preventDefault();
-    addToast("Message sent! We'll get back to you shortly.", 'success');
+    toast.success("Message sent! We'll get back to you shortly.");
     e.target.reset();
   };
 
