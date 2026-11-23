@@ -5,8 +5,13 @@ dist/
 build/
 .DS_Store
 
+# Claude Code: keep personal settings private, share project skills
+.claude/*
+!.claude/skills/
+
 # wrangler files
 .wrangler
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
